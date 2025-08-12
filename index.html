@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SheetInvestor — Dividend Toolkit | Professional Dividend Analysis in Google Sheets</title>
+  <meta name="description" content="Dividend Toolkit: professional dividend analysis inside Google Sheets. Track dividends, calculate yields, forecast payments, and analyze growth trends." />
+  <meta name="keywords" content="dividend toolkit, google sheets add-on, dividend tracker, dividend yield, dividend growth" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Dividend Toolkit — Professional Dividend Analysis" />
+  <meta property="og:description" content="Analyze dividends, forecast payments, and create dashboards — directly inside Google Sheets." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sheetinvestor.com/" />
+  <meta property="og:image" content="/assets/og-image.png" />
+  <!-- Fonts & icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root{
+      --bg:#ffffff; --muted:#64748b; --text:#0f172a;
+      --accent:#2563eb; --accent-2:#10b981; --card:#f8fafc;
+      --radius:14px; --maxw:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      margin:0;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;
+      line-height:1.5;
+    }
+    a{color:inherit}
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
+    /* NAV */
+    .nav{
+      position:sticky;top:0;background:rgba(255,255,255,0.96);backdrop-filter:blur(6px);border-bottom:1px solid #eef2f7;z-index:40;
+    }
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:700}
+    .brand img{width:40px;height:40px;border-radius:8px;object-fit:cover}
+    .links{display:flex;gap:18px;align-items:center}
+    .links a{color:var(--muted);text-decoration:none;font-weight:600}
+    .cta-row{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;font-weight:700;border:0;cursor:pointer;text-decoration:none}
+    .btn-primary{background:var(--accent);color:white;box-shadow:0 6px 18px rgba(37,99,235,0.18)}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid transparent}
+    .coffee{background:linear-gradient(90deg,#ff813f,#ffb224);color:#fff;padding:9px 14px;border-radius:999px}
+    /* HERO */
+    .hero{padding:72px 0 48px;display:grid;align-items:center;grid-template-columns:1fr 480px;gap:32px}
+    .hero h1{font-size:clamp(1.75rem,3.5vw,2.6rem);margin:0 0 12px;background:linear-gradient(90deg,#0f172a,#334155);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero p{color:var(--muted);margin:0 0 20px;font-size:1.05rem}
+    .hero .btn-wrap{display:flex;gap:12px;flex-wrap:wrap}
+    .hero-card{background:linear-gradient(180deg,#fff,#f8fafc);border-radius:16px;padding:18px;border:1px solid #eef2f7;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+    .screenshot{width:100%;height:280px;border-radius:12px;object-fit:cover;border:1px solid #e6eefc;display:block}
+    .stats{display:flex;gap:12px;margin-top:18px}
+    .stat{background:#fff;padding:12px 14px;border-radius:10px;border:1px solid #f1f5f9;min-width:120px;text-align:center}
+    .stat strong{display:block;font-size:1.25rem;color:var(--text)}
+    .stat small{display:block;color:var(--muted)}
+    /* FEATURES */
+    .features{padding:48px 0;background:var(--card);border-radius:16px;margin-top:18px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .feature{background:white;padding:18px;border-radius:12px;border:1px solid #eef2f7}
+    .feature h3{margin:0 0 8px}
+    .feature p{color:var(--muted);margin:0}
+    /* FUNCTIONS list */
+    .functions{padding:36px 0}
+    .function-item{background:linear-gradient(180deg,#fbfeff,#fff);padding:12px;border-radius:10px;border-left:4px solid var(--accent);display:flex;align-items:center;gap:12px}
+    .fn-code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;background:#f1f5f9;padding:6px 10px;border-radius:8px;color:var(--accent);font-weight:700}
+    /* HOW IT WORKS */
+    .how{padding:36px 0;background:transparent}
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+    .step{background:white;padding:20px;border-radius:12px;border:1px solid #eef2f7;text-align:center}
+    /* CTA */
+    .section-cta{padding:36px 0;background:linear-gradient(90deg,#2563eb,#7c3aed);color:#fff;border-radius:12px}
+    .section-cta h2{margin:0 0 8px}
+    .footer{margin-top:28px;padding:32px 0 60px;background:#0b1220;color:#cbd5e1}
+    .footer .col{max-width:320px}
+    /* RESPONSIVE */
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} .hero .screenshot{height:220px} .nav-inner{height:64px} .links{display:none} }
+    @media (max-width:520px){ .hero{padding:48px 0 24px} .stat{min-width:90px} }
+  </style>
+
+    <title>SheetInvestor | Powerful Investing Tools Inside Google Sheets</title>
+    <meta name="description" content="Analyze, plan, and grow your investments with professional-grade Google Sheets add-ons. Get real-time dividend data, yield calculations, and growth forecasts.">
+    <meta name="keywords" content="Google Sheets investing tools, dividend tracker, yield calculator, investment spreadsheet, dividend investing">
+    <meta property="og:title" content="SheetInvestor">
+    <meta property="og:description" content="Professional-grade investing tools, right inside Google Sheets.">
+    <meta property="og:image" content="assets/og-image.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SheetInvestor">
+    <meta name="twitter:description" content="Professional-grade investing tools, right inside Google Sheets.">
+    <meta name="twitter:image" content="assets/og-image.png">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="container nav-inner" role="navigation" aria-label="Main navigation">
+      <a class="brand" href="/index.html">
+        <img src="/assets/logo.svg" alt="SheetInvestor logo" />
+        <span>SheetInvestor</span>
+      </a>
+
+      <nav class="links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#functions">Functions</a>
+        <a href="#how-it-works">How it Works</a>
+        <a href="/about.html">About</a>
+      </nav>
+
+      <div class="cta-row">
+        <a class="btn coffee" href="https://buymeacoffee.com/aabukhater" target="_blank" rel="noopener"> <i class="fas fa-mug-hot"></i> Support</a>
+        <a class="btn btn-primary" href="https://workspace.google.com/marketplace" target="_blank" rel="noopener">🚀 Install Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main class="container" id="top">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div>
+        <h1 id="hero-heading">Powerful Investing Tools — Right Inside Google Sheets</h1>
+        <p>Analyze dividends, forecast payments, and build dashboards with the Dividend Toolkit — professional-grade functions made approachable for every investor.</p>
+
+        <div class="btn-wrap">
+          <a class="btn btn-primary" href="https://workspace.google.com/marketplace" target="_blank" rel="noopener">🚀 Install Free Add-on</a>
+          <a class="btn btn-ghost" href="#how-it-works">🔍 How it works</a>
+        </div>
+
+        <div class="stats" aria-hidden="true">
+          <div class="stat"><strong>12+</strong><small>Analysis functions</small></div>
+          <div class="stat"><strong>2+</strong><small>Years data</small></div>
+          <div class="stat"><strong>All</strong><small>Supported stocks</small></div>
+        </div>
+
+        <div style="margin-top:20px;color:var(--muted);font-size:0.95rem;">
+          Built by a founder with 25+ years in financial technology — bringing institutional insights to everyday spreadsheets.
+          <a href="/about.html" style="color:inherit;font-weight:700;margin-left:6px">Learn more →</a>
+        </div>
+      </div>
+
+      <aside>
+        <div class="hero-card" role="img" aria-label="Screenshot of Dividend Toolkit in Google Sheets">
+          <img src="/assets/screenshot.svg" alt="Dividend Toolkit screenshot" class="screenshot" />
+          <div style="margin-top:12px;display:flex;gap:8px;align-items:center;justify-content:space-between">
+            <div style="font-size:0.95rem;color:var(--muted)">One-click templates • Formula library</div>
+            <a class="btn btn-primary" href="https://workspace.google.com/marketplace" target="_blank" rel="noopener" style="padding:8px 12px;font-size:0.92rem">Install</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="features" aria-labelledby="features-heading">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <div style="font-weight:700;color:var(--accent);margin-bottom:6px">💡 Powerful Features</div>
+          <h2 id="features-heading" style="margin:0">Everything you need for smart dividend investing</h2>
+          <p style="color:var(--muted);max-width:680px;margin-top:8px">Built for individual investors and financial professionals. Get dividend data, calculate yields, predict next payments, and analyze growth trends — all inside Google Sheets.</p>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:18px">
+        <div class="feature">
+          <h3>Real-time Dividend Data</h3>
+          <p>Pull the latest dividend payments and ex-dates with intelligent caching for reliable performance.</p>
+        </div>
+        <div class="feature">
+          <h3>Yield & Growth Calculations</h3>
+          <p>Trailing and forward yields, dividend growth rates, and automated trend analysis.</p>
+        </div>
+        <div class="feature">
+          <h3>Forecast & Estimates</h3>
+          <p>Estimate next payments and projected annual dividend income using historical patterns.</p>
+        </div>
+        <div class="feature">
+          <h3>One-Click Dashboards</h3>
+          <p>Pre-built templates to visualize payment timelines, yields, and portfolio dividend income.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUNCTIONS -->
+    <section id="functions" class="functions" aria-labelledby="functions-heading">
+      <div class="grid">
+        <div>
+          <div style="font-weight:700;color:var(--accent);margin-bottom:6px">🔧 Function Library</div>
+          <h3 id="functions-heading" style="margin:0">Key functions</h3>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:12px">
+        <div class="function-item" class="function-item"><div class="fn-code">=latestDividend("AAPL")</div><div style="flex:1;margin-left:8px;color:var(--muted)">Returns most recent dividend amount</div></div>
+        <div class="function-item" class="function-item"><div class="fn-code">=lastDividendDate("MSFT")</div><div style="flex:1;margin-left:8px;color:var(--muted)">Date of last dividend payment</div></div>
+        <div class="function-item" class="function-item"><div class="fn-code">=ytdDividend("JNJ")</div><div style="flex:1;margin-left:8px;color:var(--muted)">Year-to-date dividend total</div></div>
+        <div class="function-item" class="function-item"><div class="fn-code">=trailingAnnualDividend("KO")</div><div style="flex:1;margin-left:8px;color:var(--muted)">Sum of last 12 months dividends</div></div>
+        <div class="function-item" class="function-item"><div class="fn-code">=forwardAnnualDividend("PG")</div><div style="flex:1;margin-left:8px;color:var(--muted)">Projected annual dividend</div></div>
+        <div class="function-item" class="function-item"><div class="fn-code">=dividendGrowthTrend("HD")</div><div style="flex:1;margin-left:8px;color:var(--muted)">Growth rate & trend analysis</div></div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="how" aria-labelledby="how-heading">
+      <h3 id="how-heading" style="margin-bottom:10px">Start analyzing in minutes</h3>
+      <p style="color:var(--muted);max-width:760px">Install the add-on, open the sidebar or use formulas directly, then generate insights and dashboards tailored to your goals.</p>
+
+      <div class="steps" style="margin-top:14px">
+        <div class="step"><strong>1. Install</strong><div style="color:var(--muted);margin-top:8px">Get Dividend Toolkit from the Workspace Marketplace.</div></div>
+        <div class="step"><strong>2. Open your sheet</strong><div style="color:var(--muted);margin-top:8px">Use the Extensions menu or the sidebar to insert functions.</div></div>
+        <div class="step"><strong>3. Analyze</strong><div style="color:var(--muted);margin-top:8px">Calculate yields, forecast income, and build dashboards.</div></div>
+        <div class="step"><strong>4. Iterate</strong><div style="color:var(--muted);margin-top:8px">Refine with templates or export results for reports.</div></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section-cta" aria-labelledby="cta-heading">
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;padding:20px">
+        <h2 id="cta-heading" style="margin:0">Ready to transform your dividend analysis?</h2>
+        <p style="margin:0;color:rgba(255,255,255,0.95)">Install Dividend Toolkit and bring institutional-grade dividend analytics into your spreadsheets.</p>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-primary" href="https://workspace.google.com/marketplace" target="_blank" rel="noopener">🚀 Install Free</a>
+          <a class="btn btn-ghost" href="mailto:aabukhater@gmail.com">💬 Contact Support</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    
+  </main>
+
+  <script>
+    // set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="cols">
+      <div class="col">
+        <a class="brand" href="/index.html"><img src="/assets/logo.svg" alt="SheetInvestor" style="width:36px;height:36px"/><span>SheetInvestor</span></a>
+        <p class="muted">Professional-grade dividend analytics for Google Sheets.</p>
+      </div>
+      <div class="col">
+        <strong>Product</strong>
+        <div class="links">
+          <a href="/index.html#features">Features</a>
+          <a href="https://workspace.google.com/marketplace" target="_blank" rel="noopener">Install</a>
+        </div>
+      </div>
+      <div class="col">
+        <strong>Support</strong>
+        <div class="links">
+          <a href="/about.html">About</a>
+          <a href="mailto:aabukhater@gmail.com">Contact</a>
+        </div>
+      </div>
+      <div class="col">
+        <strong>Legal</strong>
+        <div class="links">
+          <a href="/privacy-policy.html">Privacy Policy</a>
+          <a href="/terms-of-service.html">Terms of Service</a>
+        </div>
+      </div>
+      <div class="col">
+        <strong>Connect</strong>
+        <div class="social-links">
+          <a href="https://x.com/sheetinvestor" target="_blank" rel="noopener" aria-label="X">
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#icon-x"></use></svg>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61579196223029" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#icon-facebook"></use></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="legal-line">&copy; <span id="year">2025</span> SheetInvestor — Data via Yahoo Finance. Not financial advice.</div>
+  </div>
+</footer>
+
+</body>
+</html>
