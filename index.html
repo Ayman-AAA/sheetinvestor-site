@@ -13,7 +13,7 @@
   <meta property="og:description" content="Analyze dividends, forecast payments, and create dashboards — directly inside Google Sheets." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://sheetinvestor.com/" />
-  <meta property="og:image" content="/assets/og-image.png" />
+  <meta property="og:image" content="assets/og-image.png" />
   <!-- Fonts & icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -95,6 +95,18 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     
 <link rel="stylesheet" href="assets/site.css">
+  <!-- Footer layout hotfix (forces same layout as About) -->
+<style>
+  .footer .cols{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
+  .footer .col{min-width:160px;max-width:320px}
+  .footer .links a{display:block;margin:6px 0;color:inherit}
+  .footer .social-links{margin-top:8px;display:flex;gap:12px}
+  .footer .social-links a{display:inline-flex;align-items:center;justify-content:center;color:inherit}
+  .footer .social-links a:hover{color:var(--accent)}
+  .icon{width:20px;height:20px;display:inline-block}
+  .footer .legal-line{margin-top:18px;text-align:center;color:#8fabc6;font-size:13px}
+</style>
+  
 </head>
 <body>
   <!-- NAV -->
