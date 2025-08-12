@@ -1,4 +1,11 @@
-/* === Footer (Universal Styling for All Pages) === */
+/* === Base tokens (safe if you already have) === */
+:root{
+  --bg:#ffffff; --muted:#64748b; --text:#0f172a;
+  --accent:#2563eb; --accent-2:#10b981; --card:#f8fafc;
+  --radius:14px; --maxw:1200px;
+}
+
+/* === Footer (Universal for ALL pages) === */
 .footer{margin-top:28px;padding:32px 0 60px;background:#0b1220;color:#cbd5e1}
 .footer .cols{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between}
 .footer .col{min-width:160px;max-width:320px}
@@ -10,9 +17,15 @@
 .icon{width:20px;height:20px;display:inline-block}
 .footer .legal-line{margin-top:18px;text-align:center;color:#8fabc6;font-size:13px}
 
-/* === Functions Grid === */
+/* === Functions Grid (homepage section) === */
 #functions .grid, .functions .grid, section[id*="function"] .grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px
 }
-.function-item{background:#fff;border:1px solid #eef2f7;border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px}
-.fn-code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;background:#f1f5f9;padding:6px 10px;border-radius:8px;color:#2563eb;font-weight:700}
+.function-item{
+  background:#fff;border:1px solid #eef2f7;border-radius:10px;
+  padding:12px;display:flex;align-items:center;gap:12px
+}
+.fn-code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;
+  background:#f1f5f9;padding:6px 10px;border-radius:8px;color:var(--accent);font-weight:700
+}
